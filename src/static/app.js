@@ -21,9 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const spotsLeft = details.max_participants - details.participants.length;
         const participants = details.participants || [];
         const participantList = participants.length > 0
-          ? `<ul class="participant-list">${participants
-              .map((email) => `<li class="participant-item">${email}</li>`)
-              .join("")}</ul>`
+          ? `<div class="participant-list">${participants
+              .map((email) => `
+                <div class="participant-item">
+                  <span class="participant-email">${email}</span>
+                  <button class="participant-remove" type="button" data-activity="${name}" data-email="${email}" aria-label="Remove ${email}">
+                    ✕
+                  </button>
+                </div>`)
+              .join("")}</div>`
           : `<p class="participant-empty">No participants yet.</p>`;
 
         activityCard.innerHTML = `
@@ -89,6 +95,47 @@ document.addEventListener("DOMContentLoaded", () => {
       messageDiv.classList.remove("hidden");
       console.error("Error signing up:", error);
     }
+  });
+
+  async function removeParticipant(activity, email) {
+    try {
+      const response = await fetch(`/activities/${encodeURIComponent(activity)}/participants/${encodeURIComponent(email)}`, {
+        method: "DELETE",
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        messageDiv.textContent = result.message;
+        messageDiv.className = "success";
+        await fetchActivities();
+      } else {
+        messageDiv.textContent = result.detail || "An error occurred";
+        messageDiv.className = "error";
+      }
+
+      messageDiv.classList.remove("hidden");
+      setTimeout(() => {
+        messageDiv.classList.add("hidden");
+      }, 5000);
+    } catch (error) {
+      messageDiv.textContent = "Failed to remove participant.";
+      messageDiv.className = "error";
+      messageDiv.classList.remove("hidden");
+      console.error("Error removing participant:", error);
+    }
+  }
+
+  activitiesList.addEventListener("click", (event) => {
+    const button = event.target.closest(".participant-remove");
+    if (!button) {
+      return;
+    }
+
+    const activity = button.dataset.activity;
+    const email = button.dataset.email;
+
+    removeParticipant(activity, email);
   });
 
   // Initialize app
