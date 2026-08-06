@@ -10,6 +10,7 @@ def test_get_activities_returns_data():
     response = client.get("/activities")
 
     assert response.status_code == 200
+    assert response.headers["cache-control"] == "no-store"
     data = response.json()
     assert "Chess Club" in data
     assert "Programming Class" in data
