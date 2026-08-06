@@ -113,11 +113,15 @@ section h3 {
   cursor: pointer;
   font-size: 0.95rem;
   line-height: 1;
-  padding: 0;
+  padding: 2px 6px;
+  border-radius: 999px;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .participant-remove:hover {
   color: #8e0000;
+  background-color: #fdecec;
+  transform: scale(1.05);
 }
 
 .participant-empty {
