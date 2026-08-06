@@ -26,20 +26,20 @@ document.addEventListener("DOMContentLoaded", () => {
               .map((email) => `
                 <div class="participant-item">
                   <span class="participant-email">${email}</span>
-                  <button class="participant-remove" type="button" data-activity="${name}" data-email="${email}" aria-label="Remove ${email}" title="Remove ${email}">
+                  <button class="participant-remove" type="button" data-activity="${name}" data-email="${email}" aria-label="Remover ${email}" title="Remover ${email}">
                     🗑
                   </button>
                 </div>`)
               .join("")}</div>`
-          : `<p class="participant-empty">No participants yet.</p>`;
+          : `<p class="participant-empty">Nenhum participante ainda.</p>`;
 
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <p><strong>Horário:</strong> ${details.schedule}</p>
+          <p><strong>Vagas disponíveis:</strong> ${spotsLeft} ${spotsLeft === 1 ? 'vaga' : 'vagas'} ${spotsLeft === 1 ? 'restante' : 'restantes'}</p>
           <div class="participants-section">
-            <h5>Participants</h5>
+            <h5>Participantes</h5>
             ${participantList}
           </div>
         `;
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         activitySelect.appendChild(option);
       });
     } catch (error) {
-      activitiesList.innerHTML = "<p>Failed to load activities. Please try again later.</p>";
+      activitiesList.innerHTML = "<p>Falha ao carregar as atividades. Tente novamente mais tarde.</p>";
       console.error("Error fetching activities:", error);
     }
   }
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         signupForm.reset();
         await fetchActivities();
       } else {
-        messageDiv.textContent = result.detail || "An error occurred";
+        messageDiv.textContent = result.detail || "Ocorreu um erro";
         messageDiv.className = "error";
       }
 
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.classList.add("hidden");
       }, 5000);
     } catch (error) {
-      messageDiv.textContent = "Failed to sign up. Please try again.";
+      messageDiv.textContent = "Falha ao inscrever-se. Tente novamente.";
       messageDiv.className = "error";
       messageDiv.classList.remove("hidden");
       console.error("Error signing up:", error);
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.className = "success";
         await fetchActivities();
       } else {
-        messageDiv.textContent = result.detail || "An error occurred";
+        messageDiv.textContent = result.detail || "Ocorreu um erro";
         messageDiv.className = "error";
       }
 
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.classList.add("hidden");
       }, 5000);
     } catch (error) {
-      messageDiv.textContent = "Failed to remove participant.";
+      messageDiv.textContent = "Falha ao remover o participante.";
       messageDiv.className = "error";
       messageDiv.classList.remove("hidden");
       console.error("Error removing participant:", error);
